@@ -1,7 +1,6 @@
 import json
 import pandas as pd
-
-import ipdb
+import glob
 
 
 def parse_chat(chat):
@@ -28,12 +27,14 @@ def parse_chat(chat):
     return df
 
 
-def json_to_df(data):
+def json_to_df(data, name):
     parsed = parse_chat(data)
-    parsed.to_csv('chat_test_sample.csv', index=False)
+    parsed.to_csv(name + '.csv', index=False)
 
 
 if __name__ == '__main__':
-    with open('chat_test_sample.txt', 'r') as read_file:
-        data = json.load(read_file)
-    json_to_df(data)
+    filenames = glob.glob('chat_*.txt')
+    for filename in filenames:
+      with open(filename, 'r') as read_file:
+          data = json.load(read_file)
+          json_to_df(data, filename[:-4])
